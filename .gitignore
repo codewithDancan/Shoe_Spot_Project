@@ -11,7 +11,8 @@ __pycache__
 #Media - User generated content #
 media/
 
-
+.venv
+venv/
 # Environments
 .env 
 virtual_env

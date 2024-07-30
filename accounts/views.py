@@ -50,16 +50,18 @@ def register_view(request):
 
 def login_view(request):
     if request.method == "POST":
-        email = request.POST["email"]
+        username = request.POST["username"]
         password = request.POST["password"]
 
-        user = auth.authenticate(email=email, password=password)
+        user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
             return redirect("home")
         else:
             messages.info(request, "Credentials Invalid")  
     return render(request, "accounts/login.html")
+
+
 @login_required(login_url="login")  
 def password_reset_view(request):
     if request.method == "POST":
