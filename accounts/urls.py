@@ -6,7 +6,8 @@ from .views import (
           logout_view,
             password_reset_view,
               profile_update_view,
-              ) 
+              )
+from . import views
 
 
 app_name = 'accounts'
@@ -18,6 +19,8 @@ urlpatterns = [
     path('profile-update', profile_update_view, name='profile_update'),
     path('forgot-password', password_reset_view, name='forgot_password'),
     path('logout', logout_view, name='logout'),
+
+    path('single', views.single, name='single'),
     
 
 ]

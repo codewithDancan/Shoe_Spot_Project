@@ -82,6 +82,8 @@ def password_reset_view(request):
         else:
             messages.error(request, "No account found with that email address.")
     return render(request, "accounts/forgotpassword.html")
+
+
 @login_required(login_url="login")
 def profile_update_view(request):
     if request.method == "POST":
@@ -95,9 +97,13 @@ def profile_update_view(request):
 
     return render(request, "accounts/profile-update.html", {"user_form": user_form})
 
+
 @login_required(login_url="login")
 def logout_view(request):
     auth.logout(request)
     return render(request, "login")
 
 
+def single(request):
+
+    return render(request, "agent-single.html")
