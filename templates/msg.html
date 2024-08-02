@@ -1,0 +1,110 @@
+<style>
+
+  .alert1 {
+    visibility: hidden;
+    max-width: 300px;
+    text-align: left;
+    border-radius: 2px;
+    position: fixed;
+    z-index: 1111111111111111111111;
+    right: 3%;
+    top: 80px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .alert1.show {
+    visibility: visible;
+    -webkit-animation: fadein 1.5s;
+    animation: fadein 1.5s;
+  }
+  
+  @-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 80px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 80px; opacity: 1;}
+  }
+  #error {
+  background-color: #ffdddd;
+  }
+  #info {
+  background-color: #ddf3ff;
+  }
+  #success {
+  background-color: #ddffe3;
+  }
+  #myProgress {
+  width: 300px;
+  background-color: transparent;
+  
+  }
+  
+  #myBar {
+  width: 100%;
+  height: 3px;
+  
+  }
+  .message{
+  padding:7px;
+  }
+
+  .small{
+    font-family: "Lucida Console", "Courier New", cursive;
+  }
+
+</style>
+
+
+{% if messages %}
+{% for m in messages %}
+{% if m.tags == 'error' %}
+<div id="error" class="alert1 text-danger border-left-danger  alert-dismissible fade show">
+  <div class='message h-20 py-2'>
+  <i class="bi bi-bell-slash" style="font-size:25px"></i>
+  <strong class="small">{{m}}</strong>
+</div>
+<div id="myProgress">
+<div id="myBar" style='background-color: red;'></div>
+</div>
+</div>
+{% endif %}
+{% if m.tags == 'info' %}
+<div id="info" class="alert1 text-primary border-left-primary  alert-dismissible fade show">
+  <div class='message h-20 py-2'>
+  <i class="bi bi-question-circle" style="font-size:25px"></i>
+<strong class="small"> {{m}}</strong>
+  </div>
+<div id="myProgress">
+  <div id="myBar" style='background-color: blue;'></div>
+</div>
+</div>
+{% endif %}
+{% if m.tags == 'success' %}
+<div id="success" class="alert1 text-success border-left-success  alert-dismissible fade show">
+  <div class='message h-20 py-2'>
+  <i class="bi bi-check-circle" style="font-size:25px"></i>
+<strong class="small">{{m}}</strong>
+  </div>
+<div id="myProgress">
+  <div id="myBar" style='background-color: green;'></div>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  window.setTimeout(function() {
+    $(".alert1").fadeTo(1000, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+  }, 4000);
+  });
+  
+    
+</script>

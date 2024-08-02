@@ -11,9 +11,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from .forms import UserUpdateProfileForm
+from .forms import UserUpdateProfileForm,PasswordChangeForm
+from django.contrib.auth import get_user_model,update_session_auth_hash
 
-@login_required(login_url="login")
+
+@login_required(login_url="login-view")
 def home_view(request):
     return render(request, "index.html")
 
@@ -62,8 +64,8 @@ def login_view(request):
     return render(request, "accounts/login.html")
 
 
-@login_required(login_url="login")  
-def password_reset_view(request, id):
+
+def password_reset_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
         if User.objects.filter(email=email).exists():
@@ -72,7 +74,7 @@ def password_reset_view(request, id):
             uid = urlsafe_base64_encode(force_bytes(user.id))
             link = request.build_absolute_uri(f"/reset_password/{uid}/{token}/")
             mail_subject = "Reset your password"
-            message = render_to_string("password_reset_email.html", {
+            message = render_to_string("email_template/password_reset_email.html", {
                     "user": user,
                     "link": link,
                 })
@@ -85,26 +87,74 @@ def password_reset_view(request, id):
     return render(request, "accounts/forgotpassword.html")
 
 
-@login_required(login_url="login")
+
+User = get_user_model()
+
+def reset_password(request, uid, token):
+    try:
+        uid = urlsafe_base64_decode(uid).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Your password has been reset successfully.')
+                return redirect('login-view')  # Redirect to a login page or any other page
+            else:
+                messages.error(request, 'Passwords do not match.')
+        return render(request, 'accounts/reset_password_form.html', {'user': user})
+    else:
+        messages.error(request, 'The password reset link is invalid, possibly because it has already been used. Please request a new password reset.')
+        return redirect('forgot-password')
+
+
+
+@login_required(login_url="login-view")
 def profile_update_view(request):
     if request.method == "POST":
         user_form = UserUpdateProfileForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
             messages.success(request, "Your profile has been updated successfully")
-            return redirect("/")
-    else:
-        user_form = UserUpdateProfileForm()
+            return redirect("user-profile")
+        else:
+            messages.success(request, user_form.errors)
+            return redirect("user-profile")
+    return redirect("user-profile")
 
-    return render(request, "accounts/profile-update.html", {"user_form": user_form})
+
+@login_required(login_url="login-view")
+def profile_password_change(request):
+    referer_url = request.META.get('HTTP_REFERER')  
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Password has been changed successfully')
+            return redirect(referer_url)
+        else:
+            messages.error(request, form.errors )
+    return redirect(referer_url)
 
 
-@login_required(login_url="login")
+
 def logout_view(request):
     auth.logout(request)
     return redirect("login-view")
 
 
-def single(request):
 
-    return render(request, "agent-single.html")
+
+@login_required(login_url="login-view")
+def user_profile(request):
+    user_form = UserUpdateProfileForm(instance=request.user)
+    password_form = PasswordChangeForm(user=request.user)
+    return render(request, "user-profile.html",{'form':user_form,'form1':password_form})

@@ -2,6 +2,39 @@
 {% load static %}
 
 {% block content %}
+<style>
+  .btnSubmit {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+    background-color: #2eca6a;
+}
+  input[type=text], input[type=email],input[type=password] {
+    width: 100%;
+    height: 45px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid lightgrey;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 0px 20px -18px;
+    margin: 8px;
+}
+input[type=text]:hover, input[type=email]:hover,input[type=password]:hover {
+    border: 2px solid lightgrey;
+    box-shadow: 0px 0px 20px -17px;
+}
+input[type=text]:active, input[type=email]:active,input[type=password]:active {
+    transform: scale(0.95);
+}
+input[type=text]:focus, input[type=email]:focus,input[type=password]:focus {
+    border: 2px solid grey;
+}
+</style>
   <main id="main">
     <!-- ======= Intro Single ======= -->
     <section class="intro-single">
@@ -9,24 +42,9 @@
         <div class="row">
           <div class="col-md-12 col-lg-8">
             <div class="title-single-box">
-              <h1 class="title-single">Margaret Stone</h1>
-              <span class="color-text-a">Agent Immobiliari</span>
+              <h1 class="title-single">{{request.user.first_name}} {{user.last_name}}</h1>
+              <span class="color-text-a">{{user.email}}</span>
             </div>
-          </div>
-          <div class="col-md-12 col-lg-4">
-            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                  <a href="#">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                  <a href="#">Agents</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  Margaret Stone
-                </li>
-              </ol>
-            </nav>
           </div>
         </div>
       </div>
@@ -47,71 +65,72 @@
                 <div class="agent-info-box">
                   <div class="agent-title">
                     <div class="title-box-d">
-                      <h3 class="title-d">Margaret Stone
-                        <br> Escala
+                      <h3 class="title-d">{{request.user.first_name}} 
+                        <br> {{user.last_name}}
                       </h3>
                     </div>
                   </div>
-                  <div class="agent-content mb-3">
-                    <p class="content-d color-text-a">
-                      Sed porttitor lectus nibh. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.
-                      Vivamus suscipit tortor
-                      eget felis porttitor volutpat. Vivamus suscipit tortor eget felis porttitor volutpat.
-                    </p>
+                  <ul class="nav nav-tabs nav-tabs-bordered">
+
+                    <li class="nav-item">
+                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                    </li>
+    
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                    </li>
+    
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                    </li>
+    
+                  </ul>
+                  <div class="tab-content pt-2">
+                  <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <div class="agent-content mb-3 mt-5">
                     <div class="info-agents color-a">
+                      <p class="text-success"><strong>My Profile Overview</strong></p>
                       <p>
-                        <strong>Phone: </strong>
-                        <span class="color-text-a"> +54 356 945234 </span>
-                      </p>
-                      <p>
-                        <strong>Mobile: </strong>
-                        <span class="color-text-a"> 999 123 456 789</span>
+                        <strong>Username: </strong>
+                        <span class="color-text-a"> {{user.username}} </span>
                       </p>
                       <p>
                         <strong>Email: </strong>
-                        <span class="color-text-a"> agents@example.com</span>
-                      </p>
-                      <p>
-                        <strong>skype: </strong>
-                        <span class="color-text-a"> Margaret.Es</span>
-                      </p>
-                      <p>
-                        <strong>Email: </strong>
-                        <span class="color-text-a"> agents@example.com</span>
+                        <span class="color-text-a"> {{user.email}}</span>
                       </p>
                     </div>
                   </div>
-                  <div class="socials-footer">
-                    <ul class="list-inline">
-                      <li class="list-inline-item">
-                        <a href="#" class="link-one">
-                          <i class="bi bi-facebook" aria-hidden="true"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#" class="link-one">
-                          <i class="bi bi-twitter" aria-hidden="true"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#" class="link-one">
-                          <i class="bi bi-instagram" aria-hidden="true"></i>
-                        </a>
-                      </li>
-                      <li class="list-inline-item">
-                        <a href="#" class="link-one">
-                          <i class="bi bi-linkedin" aria-hidden="true"></i>
-                        </a>
-                      </li>
-                    </ul>
                   </div>
+                  <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                      <form action="{% url 'profile-update' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          {{form.as_p}}
+                        </div>
+                        <input type="submit" class="btnSubmit" value="Submit">
+                      </form>
+                  </div>
+                  <div class="tab-pane fade pt-3" id="profile-change-password">
+                    <p class="text-success"><strong>Change Password</strong></p>
+                    <form action="{% url 'profile-password-change' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        {{form1.as_p}}
+                      </div>
+                      <input type="submit" class="btnSubmit" value="Submit">
+                    </form>
+                  </div>
+
+
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
           <div class="col-md-12 section-t8">
             <div class="title-box-d">
-              <h3 class="title-d">My Properties (6)</h3>
+              <h3 class="title-d">My Order List</h3>
             </div>
           </div>
           <div class="row property-grid grid">
