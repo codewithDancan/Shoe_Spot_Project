@@ -23,10 +23,10 @@
                     }
                 </style>
                 {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-info">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
+                    {% for message in messages %}
+                        <div class="alert alert-info" id="message-{{ forloop.counter }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
             <diV class="input-box">
@@ -56,5 +56,15 @@
             </form>
         </div>
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const messages = document.querySelectorAll('.alert');
+                messages.forEach(function(message) {
+                    message.remove();
+                });
+            }, 3000); 
+        });
+    </script>
     </body>
     </html>

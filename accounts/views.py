@@ -30,19 +30,19 @@ def register_view(request):
         if password == confirm_password:
             if User.objects.filter(username=username).exists():
                 messages.info(request, "Username Taken")
-                # return redirect("register")
+                return redirect("register-view")
             elif User.objects.filter(email=email).exists():
                 messages.info(request, "Email Already Taken")
-                return redirect("register")
+                return redirect("register-view")
             else:
                 new_user = User.objects.create_user(first_name=first_name, last_name=last_name,
                                                     username=username, email=email, password=password)
                 new_user.save()
                 messages.success(request, "Account successfully created")
-                #return redirect("login")
+                return redirect("login-view")
         else:
             messages.info(request, "Password Not Matching")
-            return redirect("register")
+            return redirect("register-view")
         
     return render(request, "accounts/register.html")
 
@@ -56,31 +56,32 @@ def login_view(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect("home")
+            return redirect("/")
         else:
             messages.info(request, "Credentials Invalid")  
     return render(request, "accounts/login.html")
 
 
 @login_required(login_url="login")  
-def password_reset_view(request):
+def password_reset_view(request, id):
     if request.method == "POST":
-        email = request.POST["email"]
+        email = request.POST.get("email")
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            uid = urlsafe_base64_encode(force_bytes(user.id))
             link = request.build_absolute_uri(f"/reset_password/{uid}/{token}/")
             mail_subject = "Reset your password"
             message = render_to_string("password_reset_email.html", {
-                "user": user,
-                "link": link,
-            })
+                    "user": user,
+                    "link": link,
+                })
             send_mail(mail_subject, message, "shoe@gmail.com", [email])
+            print("email")
             messages.success(request, "An email has been sent with instructions to reset your password.")
-            return redirect("login")
+            return redirect("login-view")
         else:
-            messages.error(request, "No account found with that email address.")
+            messages.info(request, "No account found with that email address.")
     return render(request, "accounts/forgotpassword.html")
 
 
@@ -91,7 +92,7 @@ def profile_update_view(request):
         if user_form.is_valid():
             user_form.save()
             messages.success(request, "Your profile has been updated successfully")
-            return redirect("profile-update")
+            return redirect("/")
     else:
         user_form = UserUpdateProfileForm()
 
@@ -101,7 +102,7 @@ def profile_update_view(request):
 @login_required(login_url="login")
 def logout_view(request):
     auth.logout(request)
-    return render(request, "login")
+    return redirect("login-view")
 
 
 def single(request):
