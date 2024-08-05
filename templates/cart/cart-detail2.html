@@ -1,0 +1,108 @@
+
+{% load static %}
+<head>
+    <title>Your Shopping Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            width:100%;
+            border-spacing:0;
+            border-collapse: collapse;
+        }
+        
+        table th, table td {
+            text-align:left;
+            font-size:14px;
+            padding:10px;
+            margin:0;
+        }
+        
+        tbody tr:nth-child(odd) {
+            background:#efefef;
+        }
+        
+        tbody tr.subtotal {
+            background:#ccc;
+        }
+        
+        thead th, tbody tr.total {
+            background: green;
+            color:#fff;
+            font-weight:bold;
+        }
+        
+        table.cart {
+            margin-bottom:40px;
+        }
+        
+        table.cart img {
+            width:180px;
+        }
+        
+        tbody td.num {
+            text-align:right;
+        }
+        
+    </style>
+</head>
+{% block content %}
+<h1 class="text-center">Your shopping cart</h1>
+<table class="cart">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Shoe</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Price</th>
+            <th>Unit price</th>
+        </tr>
+    </thead>
+<tbody>
+    {% for item in cart %}
+    <tr>
+        <td>
+            {% if item.shoe_attribute.images.first %}
+                <img src="{{ item.shoe_attribute.images.first.image.url }}" class="card-img-top" alt="{{ item.shoe_attribute.shoe.name }}">
+            {% else %}
+                <img src="{% static 'default-shoe-image.jpg' %}" class="card-img-top" alt="{{ item.shoe_attribute.shoe.name }}">
+            {% endif %}
+
+        </td>
+            <td>{{ item.shoe_attribute.shoe.name }}</td>
+        <td>
+            <form action="{% url 'cart:add-to-cart-view' item.shoe_attribute.id %}" method="post">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                <input type="hidden" name="override" value="true">
+                {{ item.update_quantity_form.quantity }}
+                {{ item.update_quantity_form.override }}
+                <input type="submit" value="Update">
+            </form>
+        </td>
+        <td>
+        <form action="{% url 'cart:remove-from-cart-view' item.shoe_attribute.id %}" method="post">
+            {% csrf_token %}
+        <input type="submit" value="Remove">
+        </form>
+        </td>
+        <td class="num">USD {{ item.shoe_attribute.shoe.price }}</td>
+        <td class="num">USD {{ item.get_cart_item_total_price }}</td>
+    </tr>
+{% endfor %}
+<tr class="total">
+<td>Total Price</td>
+<td colspan="4"></td>
+<td class="num">${{ cart.get_total_price }}</td>
+</tr>
+</tbody>
+</table>
+<p class="text-right">
+<a href="{% url "products:shoe-list" %}" class="btn btn-secondary">Continue shopping</a>
+{% comment %}<!--Impliment Flutterwave Payment Gateway-->{% endcomment %}
+ {% for items in cart %}
+<a href="{% url 'cart:checkout-view' items.shoe_attribute.id %}" class="btn btn-success">Checkout</a>
+{% endfor%}
+</p>
+{% endblock %}
+

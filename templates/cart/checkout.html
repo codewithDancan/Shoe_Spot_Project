@@ -1,0 +1,18 @@
+
+
+{% block content %}
+<div class="text-center">
+<form method="POST" action="https://checkout.flutterwave.com/v3/hosted/pay">
+    <input type="hidden" name="public_key" value="FLWPUBK_TEST-02b9b5fc6406bd4a41c3ff141cc45e93-X" />
+    <input type="hidden" name="customer[email]" value="{{ email }}" />
+    <input type="hidden" name="customer[name]" value="{{ name }}" />
+    <input type="hidden" name="tx_ref" value="{{ tx_ref }}" />
+    <input type="hidden" name="amount" value="{{ amount }}" />
+    <input type="hidden" name="redirect_url" value="{{ redirect_url }}" />
+    <input type="hidden" name="currency" value="{{ currency }}" />
+    <input type="hidden" name="meta[source]" value="docs-html-test" />
+    <br>
+    <button type="submit" style="background-color: #ff9b00" id="start-payment-button">Pay Now with FlutterWave</button>
+</form>
+</div>
+{% endblock %}

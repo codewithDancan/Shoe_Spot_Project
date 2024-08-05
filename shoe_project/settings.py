@@ -152,3 +152,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
 EMAIL_FROM = os.getenv('EMAIL_FROM')
 EMAIL_RECEIVING_USER = os.getenv('EMAIL_RECEIVING_USER')
+
+# keyto store cart in the user session
+CART_SESSION_ID = 'cart'

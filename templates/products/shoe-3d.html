@@ -1,3 +1,4 @@
+
 {% load static%}
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +49,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <a href="{% url 'shoe-list' %}" class="btn btn-secondary btn-back">Back to Product List</a>
+                <a href="{% url 'products:shoe-list' %}" class="btn btn-secondary btn-back">Back to Product List</a>
             </div>
         </div>
         <div class="row">
@@ -78,7 +79,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // 3D Viewer setup (example with Three.js)
+        // 3D Viewer setup (with Three.js)
         const container = document.getElementById('shoeViewer');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -86,7 +87,7 @@
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
-        // Load your 3D model here (example with a GLTFLoader)
+        // Load 3D model here ( with a GLTFLoader)
         const loader = new THREE.GLTFLoader();
         loader.load('/path/to/your/shoe-model.gltf', function(gltf) {
             scene.add(gltf.scene);
@@ -109,7 +110,7 @@
 
         animate();
 
-        // Handle window resize
+        //window resize
         window.addEventListener('resize', function() {
             const width = container.clientWidth;
             const height = container.clientHeight;

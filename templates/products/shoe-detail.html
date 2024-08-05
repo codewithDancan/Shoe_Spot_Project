@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -31,10 +32,15 @@
                 <p><strong>Colors:</strong> 
                     {% for attr in shoe_attributes %}
                         {{ attr.color.name }}{% if not forloop.last %}, {% endif %}
+                        <form action="{% url 'cart:add-to-cart-view' attr.id%}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="shoe_attribute_id" value="{{attr.id}}">
+                            <input type="submit" class="btn btn-primary" value="Add to Cart">
+                        </form>
                     {% endfor %}
                 </p>
-                <a href="{% url 'shoe-3d' shoe.slug %}" class="btn btn-secondary">View in 3D</a>
-                <a style="margin-left: 70px;" href="#" class="btn btn-primary">Add to Cart</a>
+                {% comment "" %}<a style="margin-left: 70px;" href="{% url 'cart:add-to-cart' item.shoe_attribute.id %}"class="btn btn-primary">Add to Cart</a>{% endcomment %}
+                <a href="{% url 'products:shoe-3d-view' shoe.slug %}" class="btn btn-secondary">View in 3D</a>
             </div>
         </div>
     </div>

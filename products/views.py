@@ -7,7 +7,6 @@ from .models import (
 
 def shoe_list_view(request):
     shoes = Shoe.objects.all()
-    shoe_images = ShoeImage.objects.all()
     context = {
         'shoes': shoes,
     }

@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,16 +15,15 @@
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         {% if shoe.attributes.first.images.first %}
-                            <img style="width: 200px; height: 150px;" src="{{ shoe.attributes.first.images.first.image.url }}" class="card-img-top" alt="{{ shoe.name }}">
+                            <a href="{% url 'products:shoe-detail' shoe.slug %}"><img style="width: 200px; height: 150px;" src="{{ shoe.attributes.first.images.first.image.url }}" class="card-img-top" alt="{{ shoe.name }}"></a>
                         {% else %}
-                            <img style="width: 200px; height: 150px;" src="{% static 'default-shoe-image.jpg' %}" class="card-img-top" alt="{{ shoe.name }}">
+                            <a href="{% url 'products:shoe-detail' shoe.slug %}"><img style="width: 200px; height: 150px;" src="{% static 'default-shoe-image.jpg' %}" class="card-img-top" alt="{{ shoe.name }}"></a>
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ shoe.name }}</h5>
                             <p class="card-text">{{ shoe.description|truncatewords:20 }}</p>
                             <p class="card-text"><strong>${{ shoe.price }}</strong></p>
-                            <a href="{% url 'shoe-detail' shoe.slug %}" class="btn btn-primary">View Details</a>
-                            <a style="margin-left: 70px;" href="#" class="btn btn-secondary">Add to Cart</a>
+                            <a href="{% url 'products:shoe-detail' shoe.slug %}" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>

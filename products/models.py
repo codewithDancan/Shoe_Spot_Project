@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from django.utils.text import slugify
+import uuid
 
 class AbstractBaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,6 +78,7 @@ class Shoe(AbstractBaseModel):
         return self.name
 
 class ShoeAttribute(AbstractBaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     size = models.ManyToManyField(ShoeSize, blank=True, related_name="sizes")
     color = models.ForeignKey(ShoeColor, on_delete=models.CASCADE, null=True, blank=True, related_name="color")
     shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE, related_name="attributes")
