@@ -1,0 +1,11 @@
+
+
+{% block content %}
+  <h2>{% if form.instance.pk %}Edit Order{% else %}Create Order{% endif %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+  <a href="{% url 'orders:order-list' %}">Cancel</a>
+{% endblock %}

@@ -21,7 +21,7 @@ def remove_from_cart(request, shoe_attribute_id):
     shoe_attribute = get_object_or_404(ShoeAttribute, id=shoe_attribute_id)
     cart.remove(shoe_attribute)
     return redirect("cart:cart-detail-view")
-
+@login_required(login_url="login-view")
 def cart_detail(request):
     """Display the contents of the cart"""
     cart = CartMananger(request)

@@ -43,7 +43,7 @@ class Order(AbstractBaseModel):
         CANCELED = "Canceled", _("Canceled")
 
     class PaymentMethods(models.TextChoices):
-        PAYPAL = "Paypal", _("Paypal")
+        PAYPAL = "FlutterWave", _("FlutterWave")
         CARD = "Card", _("Card")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -1,0 +1,14 @@
+
+
+{% block content %}
+  <h2>Order Detail</h2>
+  <p>Reference Number: {{ order.reference_number }}</p>
+  <p>Phone: {{ order.phone }}</p>
+  <p>Status: {{ order.status }}</p>
+  <p>Address: {{ order.address }}</p>
+  <p>Payment Method: {{ order.payment_method }}</p>
+  <p>Is Paid: {{ order.is_paid }}</p>
+  <p>Postal Code: {{ order.postal_code }}</p>
+  <a href="{% url 'orders:order-update' order.id %}">Edit</a>
+  <a href="{% url 'orders:order-list' %}">Back to list</a>
+{% endblock %}
