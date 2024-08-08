@@ -15,6 +15,7 @@ def shoe_list_view(request):
         'shoes': shoes,
     }
     return render(request, 'products/shoe-list.html', context)
+    
 @login_required(login_url="login-view")
 def shoe_detail_view(request, slug):
     shoe = get_object_or_404(Shoe, slug=slug)
@@ -26,6 +27,8 @@ def shoe_detail_view(request, slug):
         'primary_image': primary_image,
     }
     return render(request, 'products/shoe-detail.html', context)
+
+
 @login_required(login_url="login-view")
 def shoe_3d_view(request, slug):
     shoe = get_object_or_404(Shoe, slug=slug)
@@ -36,3 +39,8 @@ def shoe_3d_view(request, slug):
     })
 
 
+@login_required(login_url="login-view")
+def add_shoe_view(request):
+
+    context = {}
+    return render(request, 'products/add-shoe.html', context)

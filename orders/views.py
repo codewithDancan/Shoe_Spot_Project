@@ -3,6 +3,8 @@ from .models import Order
 from .forms import OrderForm
 from django.contrib.auth.decorators import login_required
 
+
+
 @login_required(login_url="login-view")
 def order_list(request):
     orders = Order.objects.all()
