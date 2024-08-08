@@ -5,6 +5,9 @@ from .models import (
             ShoeImage,
 )
 from django.contrib.auth.decorators import login_required
+
+
+
 @login_required(login_url="login-view")
 def shoe_list_view(request):
     shoes = Shoe.objects.all()
