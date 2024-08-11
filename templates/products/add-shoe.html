@@ -1,0 +1,96 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load form_tags %}
+
+
+<head>
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+</head>
+
+{% block content %}<br><br><br><br><br><br>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-8">
+          <div class="card">
+              <div class="card-header text-center">
+                  <h2>Add New Shoe</h2>
+              </div>
+              <div class="card-body">
+                  <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      
+                      <h3 class="mb-3">Shoe Details</h3>
+                      <div class="mb-3">
+                          {{ shoe_form.name.label_tag }} 
+                          {{ shoe_form.name|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ shoe_form.description.label_tag }} 
+                          {{ shoe_form.description|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ shoe_form.price.label_tag }} 
+                          {{ shoe_form.price|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ shoe_form.category.label_tag }} 
+                          {{ shoe_form.category|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ shoe_form.is_featured.label_tag }} 
+                          {{ shoe_form.is_featured|add_class:"form-check-input" }}
+                      </div>
+
+                      <h3 class="mb-3">Shoe Attributes</h3>
+                      <div class="mb-3">
+                          {{ attribute_form.color.label_tag }} 
+                          {{ attribute_form.color|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ attribute_form.size.label_tag }} 
+                          {{ attribute_form.size|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ attribute_form.stock.label_tag }} 
+                          {{ attribute_form.stock|add_class:"form-control" }}
+                      </div>
+
+                      <h3 class="mb-3">Shoe Image</h3>
+                      <div class="mb-3">
+                          {{ image_form.image.label_tag }} 
+                          {{ image_form.image|add_class:"form-control" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ image_form.is_primary.label_tag }} 
+                          {{ image_form.is_primary|add_class:"form-check-input" }}
+                      </div>
+                      <div class="mb-3">
+                          {{ image_form.angle.label_tag }} 
+                          {{ image_form.angle|add_class:"form-select" }}
+                      </div>
+
+                      <div class="d-grid gap-2">
+                          <button type="submit" class="btn btn-success btn-block">Add Shoe</button>
+                      </div>
+                  </form>
+                  <a style="color: green;" href="{% url 'products:shoe-list' %}" class="btn btn-link mt-3 d-block text-center">Cancel</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div
+{% endblock %}

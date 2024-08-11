@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+
+
+
+{% block content %}
+<br><br><br><br>
+<div class="container">
+    <h1 class="my-4">{{ post.title }}</h1>
+    {% if post.featured_image %}
+    <img class="card-img-top img-a img-fluid" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+    {% endif %}
+    <p>{{ post.content }}</p>
+    
+    <h4 class="my-4">Comments</h4>
+    {% for comment in comments %}
+    <div class="media mb-4">
+        <div class="media-body">
+            <h5 class="mt-0">{{ comment.name }}</h5>
+            {{ comment.content }}
+        </div>
+    </div>
+    {% endfor %}
+    
+    <h4 class="my-4">Leave a Comment:</h4>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="content">Comment</label>
+            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+{% endblock %}

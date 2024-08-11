@@ -1,14 +1,30 @@
 
+{% extends 'main.html' %}
 
 {% block content %}
-  <h2>Order Detail</h2>
-  <p>Reference Number: {{ order.reference_number }}</p>
-  <p>Phone: {{ order.phone }}</p>
-  <p>Status: {{ order.status }}</p>
-  <p>Address: {{ order.address }}</p>
-  <p>Payment Method: {{ order.payment_method }}</p>
-  <p>Is Paid: {{ order.is_paid }}</p>
-  <p>Postal Code: {{ order.postal_code }}</p>
-  <a href="{% url 'orders:order-update' order.id %}">Edit</a>
-  <a href="{% url 'orders:order-list' %}">Back to list</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h2 class="mb-0">Order Detail</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Reference Number:</strong> {{ order.reference_number }}</p>
+                    <p><strong>Phone:</strong> {{ order.phone }}</p>
+                    <p><strong>Status:</strong> {{ order.status }}</p>
+                    <p><strong>Address:</strong> {{ order.address }}</p>
+                    <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+                    <p><strong>Is Paid:</strong> {{ order.is_paid }}</p>
+                    <p><strong>Postal Code:</strong> {{ order.postal_code }}</p>
+                    <div class="mt-4">
+                        <a href="{% url 'orders:order-update' order.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'orders:order-list' %}" class="btn btn-secondary">Back to list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
+

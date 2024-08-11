@@ -13,11 +13,17 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from .forms import UserUpdateProfileForm,PasswordChangeForm
 from django.contrib.auth import get_user_model,update_session_auth_hash
+from products.models import Shoe, ShoeAttribute
 
 
 @login_required(login_url="login-view")
 def home_view(request):
-    return render(request, "index.html")
+    shoes = Shoe.objects.all()
+    
+    context = {
+        'shoes': shoes,
+    }
+    return render(request, "index.html", context)
 
 
 def register_view(request):

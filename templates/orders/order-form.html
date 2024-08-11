@@ -1,11 +1,29 @@
+{% extends 'main.html' %}
 
 
+
+<br><br><br>
 {% block content %}
-  <h2>{% if form.instance.pk %}Edit Order{% else %}Create Order{% endif %}</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-  <a href="{% url 'orders:order-list' %}">Cancel</a>
+<div class="container mt-5">
+  <h2>Create an Order</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">
+                        {% if form.instance.pk %}Edit Order{% else %}Create Order{% endif %}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <a href="{% url 'orders:order-list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

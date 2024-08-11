@@ -1,16 +1,37 @@
-
+{% extends 'main.html' %}
 
 {% block content %}
-  <h2>Order List</h2>
-  <a href="{% url 'orders:order-create' %}">Create New Order</a>
-  <ul>
-    {% for order in orders %}
-      <li>
-        <a href="{% url 'orders:order-detail' order.id %}">{{ order.reference_number }}</a> 
-        - {{ order.status }}
-        <a href="{% url 'orders:order-update' order.id %}">Edit</a>
-        <a href="{% url 'orders:order-delete' order.id %}">Delete</a>
-      </li>
-    {% endfor %}
-  </ul>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Order List</h2>
+        <a href="{% url 'orders:order-create' %}" class="btn btn-success">Create New Order</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Reference Number</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'orders:order-detail' order.id %}">{{ order.reference_number }}</a>
+                        </td>
+                        <td>{{ order.status }}</td>
+                        <td>
+                            <a href="{% url 'orders:order-update' order.id %}" class="btn btn-success btn-sm">Edit</a>
+                            <a href="{% url 'orders:order-delete' order.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
+
