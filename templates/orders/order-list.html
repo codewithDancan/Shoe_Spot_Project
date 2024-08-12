@@ -1,6 +1,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<br><br><br><br>
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Order List</h2>
@@ -11,18 +12,26 @@
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
+                    
+                    <th>Address</th>
                     <th>Reference Number</th>
+                    <th>City</th>
                     <th>Status</th>
+                    <th>Is Paid</th>
                     <th>Actions</th>
+                    
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
                     <tr>
+                        <td>{{ orde.address }}</td>
                         <td>
                             <a href="{% url 'orders:order-detail' order.id %}">{{ order.reference_number }}</a>
                         </td>
+                        <td>{{ order.city }}</td>
                         <td>{{ order.status }}</td>
+                        <td>{{ order.is_paid }}</td>
                         <td>
                             <a href="{% url 'orders:order-update' order.id %}" class="btn btn-success btn-sm">Edit</a>
                             <a href="{% url 'orders:order-delete' order.id %}" class="btn btn-danger btn-sm">Delete</a>

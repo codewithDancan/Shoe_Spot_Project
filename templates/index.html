@@ -191,13 +191,13 @@
                   <div class="card-overlay-a-content">
                     <div class="card-header-a">
                       <h2 class="card-title-a">
-                        <a href="property-single.html">206 Mount
-                          <br /> Olive Road Two</a>
+                        <a href="property-single.html">555 Kisumu
+                          <br /> Uganda Road</a>
                       </h2>
                     </div>
                     <div class="card-body-a">
                       <div class="price-box d-flex">
-                        <span class="price-a">Price | $ 12.000</span>
+                        <span class="price-a">Price | $ 17.000</span>
                       </div>
                       <a href="{% url 'products:shoe-list' %}" class="link-a">Click here to view
                         <span class="bi bi-chevron-right"></span>
@@ -216,13 +216,13 @@
                   <div class="card-overlay-a-content">
                     <div class="card-header-a">
                       <h2 class="card-title-a">
-                        <a href="property-single.html">206 Mount
-                          <br /> Olive Road Two</a>
+                        <a href="property-single.html">100 Saudi 
+                          <br /> Saudi Road Two</a>
                       </h2>
                     </div>
                     <div class="card-body-a">
                       <div class="price-box d-flex">
-                        <span class="price-a">Price | $ 12.000</span>
+                        <span class="price-a">Price | $ 30.000</span>
                       </div>
                       <a href="{% url 'products:shoe-list' %}" class="link-a">Click here to view
                         <span class="bi bi-chevron-right"></span>
@@ -266,13 +266,13 @@
                   <div class="card-overlay-a-content">
                     <div class="card-header-a">
                       <h2 class="card-title-a">
-                        <a href="property-single.html">206 Mount
-                          <br /> Olive Road Two</a>
+                        <a href="property-single.html">310 Nairobi
+                          <br /> Uhuru Highway</a>
                       </h2>
                     </div>
                     <div class="card-body-a">
                       <div class="price-box d-flex">
-                        <span class="price-a">Price | $ 12.000</span>
+                        <span class="price-a">Price | $ 9.000</span>
                       </div>
                       <a href="{% url 'products:shoe-list' %}" class="link-a">Click here to view
                         <span class="bi bi-chevron-right"></span>
@@ -288,54 +288,55 @@
     </section><!-- End Latest Properties Section -->
 
     <!-- ======= Latest News Section ======= -->
-    <section class="section-news" id="section-news" style="margin-top:-350px">
-      <div class="container" id="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="title-wrap d-flex justify-content-between">
-              <div class="title-box">
-                <h2 class="title-a">Latest Blogs</h2>
-              </div>
-              <div class="title-link">
-                <a href="{% url 'blog:blog-list' %}">All Blogs
-                  <span class="bi bi-chevron-right"></span>
-                </a>
+    <section class="property-grid grid">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                <div class="title-wrap d-flex justify-content-between">
+                  <div class="title-box">
+                    <h2 class="title-a">Latest Blogs</h2>
+                  </div>
+                  <div class="title-link">
+                    <a href="{% url 'blog:blog-list' %}">All Blogs
+                      <span class="bi bi-chevron-right"></span>
+                    </a>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div id="news-carousel" class="swiper">
-          <div class="swiper-wrapper">
-
-            <div class="carousel-item-c swiper-slide">
-              <div class="card-box-b card-shadow news-box">
-                <div class="img-box-b">
-                  <img src="{% static 'assets/img/post-2.jpg' %}" alt="" class="img-b img-fluid">
+       
+            <div class="carousel-item-b swiper-slide">
+              <div class="card-box-a card-shadow">
+                <div class="img-box-a">
+                  <img src="{% static 'assets/img/slide2.jpg' %}" alt="">
                 </div>
                 <div class="card-overlay">
-                  <div class="card-header-b">
-                    <div class="card-category-b">
-                      <a href="#" class="category-b">House</a>
-                    </div>
-                    <div class="card-title-b">
-                      <h2 class="title-2">
-                        <a href="blog-single.html">House is comming
-                          <br> new</a>
-                      </h2>
-                    </div>
-                    <div class="card-date">
-                      <span class="date-b">18 Sep. 2017</span>
+                  <div class="card-overlay-a-content">
+                    <div class="card-header-a">
+                        <div class="container mt-5">
+                          <div class="row">
+                            {% for post in latest_posts %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm">
+                                    {% if post.featured_image %}
+                                    <img class="card-img-top" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h4 class="card-title">{{ post.title }}</h4>
+                                        <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                                        <a href="{% url 'blog:blog-detail' post.slug %}" class="btn btn-success">Read More</a><br><br>
+                                        <h5 style="color: green">By {{post.author}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                          </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div><!-- End carousel item -->
-        <div class="news-carousel-pagination carousel-pagination"></div>
-      </div>
-        </div>
-      </div>
-    </section><!-- End Latest News Section -->
+                </div>         
+    </section>
+                   
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
     <!-- ======= Testimonials Section ======= -->
     <section class="section-testimonials  nav-arrow-a" style="margin-top:-200px;margin-bottom: -450px;">

@@ -1,0 +1,23 @@
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        {% for post in latest_posts %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if post.featured_image %}
+                <img class="card-img-top" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">{{ post.title }}</h4>
+                    <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                    <a href="{% url 'blog:blog-detail' post.slug %}" class="btn btn-success">Read More</a><br><br>
+                    <h5 style="color: green">By {{post.author}}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

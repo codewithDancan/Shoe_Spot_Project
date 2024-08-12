@@ -57,12 +57,16 @@
 
                       <h3 class="mb-3">Shoe Attributes</h3>
                       <div class="mb-3">
+                        {{ attribute_form.size.label_tag }} 
+                        {{ attribute_form.size|add_class:"form-control" }}
+                    </div>
+                      <div class="mb-3">
                           {{ attribute_form.color.label_tag }} 
                           {{ attribute_form.color|add_class:"form-control" }}
                       </div>
                       <div class="mb-3">
-                          {{ attribute_form.size.label_tag }} 
-                          {{ attribute_form.size|add_class:"form-control" }}
+                          {{ attribute_form.shoe.label_tag }} 
+                          {{ attribute_form.shoe|add_class:"form-control" }}
                       </div>
                       <div class="mb-3">
                           {{ attribute_form.stock.label_tag }} 
@@ -70,6 +74,10 @@
                       </div>
 
                       <h3 class="mb-3">Shoe Image</h3>
+                      <div class="mb-3">
+                          {{ image_form.shoe_attribute.label_tag }} 
+                          {{ image_form.shoe_attribute|add_class:"form-control" }}
+                      </div>
                       <div class="mb-3">
                           {{ image_form.image.label_tag }} 
                           {{ image_form.image|add_class:"form-control" }}

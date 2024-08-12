@@ -14,14 +14,18 @@ from django.contrib.auth.tokens import default_token_generator
 from .forms import UserUpdateProfileForm,PasswordChangeForm
 from django.contrib.auth import get_user_model,update_session_auth_hash
 from products.models import Shoe, ShoeAttribute
+from orders.models import Order
+from blog.models import BlogPost
 
 
 @login_required(login_url="login-view")
 def home_view(request):
     shoes = Shoe.objects.all()
+    latest_posts = BlogPost.objects.all().order_by('-created_at')[:3]
     
     context = {
         'shoes': shoes,
+        'latest_posts': latest_posts
     }
     return render(request, "index.html", context)
 
@@ -165,4 +169,10 @@ def logout_view(request):
 def user_profile(request):
     user_form = UserUpdateProfileForm(instance=request.user)
     password_form = PasswordChangeForm(user=request.user)
-    return render(request, "user-profile.html",{'form':user_form,'form1':password_form})
+    orders = Order.objects.all()
+    context = {
+        "form": user_form,
+        "form1": password_form,
+        'orders': orders
+    }
+    return render(request, "user-profile.html", context)

@@ -49,11 +49,15 @@ def add_blog_post_view(request):
             blog_post.author = request.user  # Set the author as the logged-in user
             blog_post.save()
             form.save_m2m()  # Save the many-to-many data for tags
-            return redirect("blog-list-view")  # Redirect to the blog list view after successful post creation
+            return redirect("blog:blog-list")  # Redirect to the blog list view after successful post creation
     else:
         form = BlogPostForm()
    
 
   
     return render(request, "blog/add-blog-post.html", {"form": form})
+def latest_blogs_view(request):
+    """fetch the first three latest blog posts"""
+    latest_posts = BlogPost.objects.all().order_by('-created_at')[:3]
+    return render(request, 'index.html', {'latest_posts': latest_posts})
 

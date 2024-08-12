@@ -10,7 +10,7 @@ class ShoeForm(forms.ModelForm):
 class ShoeAttributeForm(forms.ModelForm):
     class Meta:
         model = ShoeAttribute
-        fields = "__all__"
+        fields = ["size", "color", "shoe", "stock"]
 
 class ShoeImageForm(forms.ModelForm):
     class Meta:

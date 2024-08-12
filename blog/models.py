@@ -8,6 +8,9 @@ class BlogCategory(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=50, editable=False, unique=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = "Blog Categories"
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)

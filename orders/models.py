@@ -15,6 +15,9 @@ def generate_unique_reference_number():
 class Country(AbstractBaseModel):
     name = models.CharField(max_length=100, validators=[validate_unique_country_name])
 
+    class Meta:
+        verbose_name_plural = "Countries"
+        
     def __str__(self):
         return f"{self.name}"
 
@@ -22,6 +25,9 @@ class Country(AbstractBaseModel):
 class City(AbstractBaseModel):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Cities"
 
     def __str__(self):
         return f"{self.name}, {self.country}"
