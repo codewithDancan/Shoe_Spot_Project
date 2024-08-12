@@ -15,11 +15,13 @@
             </div>
           </div>
       <div class="row">
+        {% if user.groups.all.0.name != 'customer' %}
         <div class="col-sm-12">
             <div class="grid-option">
               <a href="{% url 'blog:add-blog' %}" class="btn btn-success"><i class="bi bi-plus"> Add a Blog Post </i></a>
             </div>
           </div>
+          {% endif %}
           <div class="carousel-item-b swiper-slide">
             <div class="card-box-a card-shadow">
               <div class="img-box-a">

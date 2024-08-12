@@ -25,7 +25,7 @@ def home_view(request):
     }
     return render(request, "index.html", context)
 
-
+from django.contrib.auth.models import User, Group
 def register_view(request):
     if request.method == "POST":
         first_name = request.POST["first_name"]
@@ -45,7 +45,9 @@ def register_view(request):
             else:
                 new_user = User.objects.create_user(first_name=first_name, last_name=last_name,
                                                     username=username, email=email, password=password)
+                customer_group, created = Group.objects.get_or_create(name='customer')
                 new_user.save()
+                new_user.groups.add(customer_group)
                 messages.success(request, "Account successfully created")
                 return redirect("login-view")
         else:

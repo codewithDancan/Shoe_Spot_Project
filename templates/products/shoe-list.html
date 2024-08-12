@@ -16,11 +16,13 @@
                 </div>
               </div>
           <div class="row">
+            {% if user.groups.all.0.name != 'customer' %}
             <div class="col-sm-12">
                 <div class="grid-option">
                   <a href="{% url 'products:add-shoe' %}" class="btn btn-success"><i class="bi bi-plus"> Add Shoe</i></a>
                 </div>
               </div>
+              {% endif %}
 
 
 

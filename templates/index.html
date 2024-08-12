@@ -1,8 +1,17 @@
 {% extends 'main.html' %}
 {% load static %}
-
 {% block content %}
-  
+  <style>
+    @media screen and (max-width: 600px) {
+      #container{
+        margin-top: -610px;
+      }
+      #container2{
+        margin-top: -420px;
+        margin-bottom: -570px;
+      }
+    }
+  </style>
   <div class="intro intro-carousel swiper position-relative">
 
     <div class="swiper-wrapper">
@@ -80,8 +89,6 @@
     <div class="swiper-pagination"></div>
   </div><!-- End Intro Section -->
 
-  <main id="main">
-
     <!-- ======= Services Section ======= -->
     <section class="section-services section-t8">
       <div class="container">
@@ -155,7 +162,7 @@
     </section><!-- End Services Section -->
 
     <!-- ======= Latest Properties Section ======= -->
-    <section class="section-property section-t8">
+    <section class="section-property" style="margin-top:30px">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -274,12 +281,15 @@
                   </div>
                 </div>
               </div>
-            </div><!-- End carousel item -->
+            </div>
+          </div>
+        </div>
+      </div><!-- End carousel item -->
     </section><!-- End Latest Properties Section -->
 
     <!-- ======= Latest News Section ======= -->
-    <section class="section-news section-t8">
-      <div class="container">
+    <section class="section-news" id="section-news" style="margin-top:-350px">
+      <div class="container" id="container">
         <div class="row">
           <div class="col-md-12">
             <div class="title-wrap d-flex justify-content-between">
@@ -323,11 +333,13 @@
             </div><!-- End carousel item -->
         <div class="news-carousel-pagination carousel-pagination"></div>
       </div>
+        </div>
+      </div>
     </section><!-- End Latest News Section -->
 
     <!-- ======= Testimonials Section ======= -->
-    <section class="section-testimonials section-t8 nav-arrow-a">
-      <div class="container">
+    <section class="section-testimonials  nav-arrow-a" style="margin-top:-200px;margin-bottom: -450px;">
+      <div class="container" id="container2">
           <div class="col-md-12">
             <div class="title-wrap d-flex justify-content-between">
               <div class="title-box">
@@ -418,10 +430,9 @@
 
           </div>
         </div>
-        <div class="testimonial-carousel-pagination carousel-pagination"></div>
 
       </div>
-    </section><!-- End Testimonials Section -->
-  </main>
+    </section>
+
 
 {% endblock content %}
