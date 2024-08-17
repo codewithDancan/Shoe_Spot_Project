@@ -34,6 +34,39 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+    
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
+  cursor: pointer;
+}
+  </style>
 </head>
 <body>
 
@@ -46,85 +79,35 @@
       </div>
       <span class="close-box-collapse right-boxed bi bi-x"></span>
       <div class="box-collapse-wrap form">
-        <form class="form-a">
+        <form class="form-a" method="get" action="{% url 'products:shoe-list' %}">
           <div class="row">
             <div class="col-md-12 mb-2">
               <div class="form-group">
-                <label class="pb-2" for="Type">Keyword</label>
-                <input type="text" class="form-control form-control-lg form-control-a" placeholder="Keyword">
+                <label class="pb-2" for="Type">Name</label>
+                <input type="text" name="name" class="form-control form-control-lg form-control-a" placeholder="Search Name">
               </div>
             </div>
-            <div class="col-md-6 mb-2">
+            
+          <div class="col-md-12 mb-2">
               <div class="form-group mt-3">
-                <label class="pb-2" for="Type">Type</label>
-                <select class="form-control form-select form-control-a" id="Type">
-                  <option>All Type</option>
-                  <option>For Rent</option>
-                  <option>For Sale</option>
-                  <option>Open House</option>
-                </select>
+                <label class="pb-2" for="bathrooms">Price Greater than</label>
+                <div class="slidecontainer">
+                  <input type="range" name="price_lt" min="1" max="500" value="500" class="slider" id="myRange">
+                  <p>Value: <span id="demo"></span></p>
+                </div>
               </div>
             </div>
-            <div class="col-md-6 mb-2">
+            <div class="col-md-12 mb-2">
               <div class="form-group mt-3">
-                <label class="pb-2" for="city">City</label>
-                <select class="form-control form-select form-control-a" id="city">
-                  <option>All City</option>
-                  <option>Alabama</option>
-                  <option>Arizona</option>
-                  <option>California</option>
-                  <option>Colorado</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6 mb-2">
-              <div class="form-group mt-3">
-                <label class="pb-2" for="bedrooms">Bedrooms</label>
-                <select class="form-control form-select form-control-a" id="bedrooms">
-                  <option>Any</option>
-                  <option>01</option>
-                  <option>02</option>
-                  <option>03</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6 mb-2">
-              <div class="form-group mt-3">
-                <label class="pb-2" for="garages">Garages</label>
-                <select class="form-control form-select form-control-a" id="garages">
-                  <option>Any</option>
-                  <option>01</option>
-                  <option>02</option>
-                  <option>03</option>
-                  <option>04</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6 mb-2">
-              <div class="form-group mt-3">
-                <label class="pb-2" for="bathrooms">Bathrooms</label>
-                <select class="form-control form-select form-control-a" id="bathrooms">
-                  <option>Any</option>
-                  <option>01</option>
-                  <option>02</option>
-                  <option>03</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6 mb-2">
-              <div class="form-group mt-3">
-                <label class="pb-2" for="price">Min Price</label>
-                <select class="form-control form-select form-control-a" id="price">
-                  <option>Unlimite</option>
-                  <option>$50,000</option>
-                  <option>$100,000</option>
-                  <option>$150,000</option>
-                  <option>$200,000</option>
-                </select>
+                <label class="pb-2" for="price">Price Lesser Than</label>
+                <div class="slidecontainer">
+                  <input name="pric_gt" type="range" min="1" max="500" value="0" class="slider" id="myRange1">
+                  <p>Value: <span id="demo1"></span></p>
+                </div>
               </div>
             </div>
             <div class="col-md-12">
-              <button type="submit" class="btn btn-b">Search Property</button>
+              <button type="submit" class="btn btn-b">Search Shoe</button>
             </div>
           </div>
         </form>
@@ -187,9 +170,9 @@
 
     
     {% block content %}
-        
+    <br><br><br><br><br><br><br>
     {% endblock content %}
-
+    
     <section class="section-footer">
         <div class="container">
           <div class="row">
@@ -264,7 +247,23 @@
 
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
+  <script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    var slider1 = document.getElementById("myRange1");
+    var output1 = document.getElementById("demo1");
 
+
+    output.innerHTML = slider.value;
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+    
+    output1.innerHTML = slider1.value;
+    slider1.oninput = function() {
+      output1.innerHTML = this.value;
+    }
+    </script>
 </body>
 
 </html>

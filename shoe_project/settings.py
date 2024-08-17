@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'reviews.apps.ReviewsConfig',
     'support.apps.SupportConfig',
     'blog.apps.BlogConfig',
+
+    'django_filters',
 ]
 
 MIDDLEWARE = [

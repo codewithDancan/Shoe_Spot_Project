@@ -20,7 +20,7 @@ from blog.models import BlogPost
 
 @login_required(login_url="login-view")
 def home_view(request):
-    shoes = Shoe.objects.all()
+    shoes = Shoe.objects.all()[:5]
     latest_posts = BlogPost.objects.all().order_by('-created_at')[:3]
     
     context = {

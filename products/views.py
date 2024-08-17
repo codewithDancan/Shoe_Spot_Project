@@ -9,17 +9,21 @@ from django.contrib.auth.decorators import login_required
 from .forms import (
     ShoeForm, ShoeAttributeForm, ShoeImageForm
 )
-
+from .filters import ShoesFilter
 
 
 @login_required(login_url="login-view")
 def shoe_list_view(request):
-    shoes = Shoe.objects.all()
+    shoes_list = Shoe.objects.all()
+    shoes_filter = ShoesFilter(request.GET, queryset=shoes_list)
+    shoes= shoes_filter.qs
+    print(shoes)
     context = {
         'shoes': shoes,
     }
     return render(request, 'products/shoe-list.html', context)
-    
+
+
 @login_required(login_url="login-view")
 def shoe_detail_view(request, slug):
     shoe = get_object_or_404(Shoe, slug=slug)

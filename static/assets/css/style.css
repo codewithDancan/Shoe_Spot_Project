@@ -1277,6 +1277,7 @@ a:hover {
 @media (max-width: 767px) {
   .card-box-a .card-overlay-a-content {
     bottom: 65px;
+    /* color: rgb(0, 255, 179); */
   }
 
   .card-box-a .card-body-a {

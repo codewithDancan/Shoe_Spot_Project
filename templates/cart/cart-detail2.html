@@ -62,8 +62,9 @@
     </style>
 </head>
 {% block content %}
+<div class="container">
 <a class="navbar-brand text-brand" href="{% url 'home-view' %}">Shoe<span class="color-b"> Spot</span></a>
-<h1 class="text-center navbar-brand text-brand">Your <span class="color-b"> Shopping</span></a> cart </h1>
+<h2>My Cart</h2>
 <table class="cart">
     <thead>
         <tr>
@@ -117,9 +118,11 @@
 <p class="text-right">
 <a href="{% url "products:shoe-list" %}" class="btn btn-secondary">Continue shopping</a>
 {% comment %}<!--Impliment Flutterwave Payment Gateway-->{% endcomment %}
- {% for items in cart %}
-<a href="{% url 'cart:checkout-view' items.shoe_attribute.id %}" class="btn btn-success">Checkout</a>
-{% endfor%}
+{% for item in cart %}
+    <a href="{% url 'cart:checkout-view' item.shoe_attribute.id %}" class="btn btn-success">Checkout</a>
+{% endfor %}
+
 </p>
+</div>
 {% endblock %}
 

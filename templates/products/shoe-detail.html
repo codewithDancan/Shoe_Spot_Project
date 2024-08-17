@@ -5,10 +5,26 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ shoe.name }}</title>
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  @media screen and (max-width: 600px) {
+    #container{
+      margin-top: 610px;
+    }
+    #container2{
+      margin-top: 20px;
+      margin-bottom: -570px;
+    }
+    .card-title-a{
+      font-size: 14px;
+    }
+  }
+</style>
 </head>
 {% block content%}
-<div class="carousel-item-b swiper-slide">
+<br><br><br><br><br>
+<div class="carousel-item-b swiper-slide container"  style="margin-top: 70px;">
     <div class="card-box-a card-shadow">
       <div class="img-box-a">
         <img src="{% static 'assets/img/slide1.jpg' %}" alt="" class="img-a img-fluid">
@@ -19,7 +35,7 @@
             <h2 class="card-title-a">
                 <section class="property-grid grid">
                     <div class="container mt-5">
-                        <h1 class="text-center">{{ shoe.name }}</h1><br><br>
+                        <h1 class="text-center  text-white .card-title-a" id="container">{{ shoe.name }}</h1><br><br>
                         <div class="row">
                             <div class="col-md-6">
                                 {% if primary_image %}
@@ -28,8 +44,8 @@
                                     <img style="width: 500px; height: 400px; margin-left:100px;" src="{% static 'images/download.jpg' %}" class="img-fluid" alt="{{ shoe.name }}">
                                 {% endif %}
                             </div>
-                            <div class="col-md-6">
-                                <h2>${{ shoe.price }}</h2>
+                            <div class="col-md-6 .card-title-a">
+                                <h2 class="text-white">${{ shoe.price }}</h2>
                                 <p>{{ shoe.description }}</p>
                                 <p><strong>Category:</strong> {{ shoe.category.name }}</p>
                                 <p><strong>Sizes:</strong> 
