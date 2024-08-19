@@ -16,6 +16,7 @@ from django.contrib.auth import get_user_model,update_session_auth_hash
 from products.models import Shoe, ShoeAttribute
 from orders.models import Order
 from blog.models import BlogPost
+from django.contrib.auth.models import User, Group
 
 
 @login_required(login_url="login-view")
@@ -29,7 +30,6 @@ def home_view(request):
     }
     return render(request, "index.html", context)
 
-from django.contrib.auth.models import User, Group
 def register_view(request):
     if request.method == "POST":
         first_name = request.POST["first_name"]

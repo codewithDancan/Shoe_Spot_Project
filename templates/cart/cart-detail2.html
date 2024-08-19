@@ -119,8 +119,9 @@
 <a href="{% url "products:shoe-list" %}" class="btn btn-secondary">Continue shopping</a>
 {% comment %}<!--Impliment Flutterwave Payment Gateway-->{% endcomment %}
 {% for item in cart %}
-    <a href="{% url 'cart:checkout-view' item.shoe_attribute.id %}" class="btn btn-success">Checkout</a>
+    
 {% endfor %}
+<a href="{% url 'cart:checkout-view'%}" class="btn btn-success">Checkout</a>
 
 </p>
 </div>

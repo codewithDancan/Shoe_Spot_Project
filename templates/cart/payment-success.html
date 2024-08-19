@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block content %}
+<section>
+    <div class="text-center">
+        <h3>Thank you for your payment, {{ user.username }}!</h3>
+        <p>Your transaction was successful.</p>
+        <p>Transaction Reference: {{ tx_ref }}</p>
+        <p>Amount: {{ currency }} ${{ amount }}</p>
+        <p>You will receive a confirmation email shortly.</p>
+    </div>
+
+    <script>
+        // This script would handle the callback logic
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const tx_ref = urlParams.get('tx_ref');
+            const transaction_id = urlParams.get('transaction_id');
+
+            if (status === 'successful') {
+                // Trigger a request to the server to verify the transaction
+                fetch(`/payment-callback?status=${status}&tx_ref=${tx_ref}&transaction_id=${transaction_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Handle successful transaction
+                            alert('Payment verified successfully!');
+                        } else {
+                            // Handle unsuccessful verification
+                            alert('Payment verification failed!');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                // Handle failed payment
+                alert('Payment failed!');
+            }
+        };
+    </script>
+</section>
+{% endblock %}

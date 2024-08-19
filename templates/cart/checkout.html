@@ -11,10 +11,12 @@
     <input type="hidden" name="customer[name]" value="{{ name }}" />
     <input type="hidden" name="tx_ref" value="{{ tx_ref }}" />
     <input type="hidden" name="amount" value="{{ amount }}" />
-    <input type="hidden" name="redirect_url" value="{{ redirect_url }}" />
+    <input type="hidden" name="redirect_url" value=" https://6e0d-105-161-4-104.ngrok-free.app" />
     <input type="hidden" name="currency" value="{{ currency }}" />
     <input type="hidden" name="meta[source]" value="docs-html-test" />
     <br>
+
+    <h3><strong>{{user.username}}  </strong>Your order is <strong>{{currency}}:</strong>  <strong>${{amount}}</strong></h3><br><br>
 
     <button type="submit" style="background-color: #ff9b00" id="start-payment-button">Pay Now with FlutterWave</button>
 

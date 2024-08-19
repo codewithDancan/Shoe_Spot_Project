@@ -65,6 +65,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'shoe_project.urls'
 AUTH_USER_MODEL = 'accounts.User'
 
+CSRF_TRUSTED_ORIGINS = ['https://6e0d-105-161-4-104.ngrok-free.app']
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

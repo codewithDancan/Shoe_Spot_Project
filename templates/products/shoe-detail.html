@@ -14,71 +14,80 @@
     }
     #container2{
       margin-top: 20px;
-      margin-bottom: -570px;
     }
     .card-title-a{
-      font-size: 14px;
+      font-size: 5px;
+
+    }
+    .img-box-a {
+        height: 600px;
+    }
+    .card-overlay-a-content {
+        margin-top: 20px;
+    }
+    h1,
+    h2,
+    p {
+        font-size: 5px;
     }
   }
 </style>
 </head>
 {% block content%}
 <br><br><br><br><br>
-<div class="carousel-item-b swiper-slide container"  style="margin-top: 70px;">
-    <div class="card-box-a card-shadow">
-      <div class="img-box-a">
-        <img src="{% static 'assets/img/slide1.jpg' %}" alt="" class="img-a img-fluid">
-      </div>
-      <div class="card-overlay">
-        <div class="card-overlay-a-content">
+
+
+<div class="carousel-item-b swiper-slide" style="background-image: linear-gradient(to left, rgba(255,0,200), rgb(0, 255, 179));">
+    <div class="card-box-a card-">
           <div class="card-header-a">
             <h2 class="card-title-a">
-                <section class="property-grid grid">
-                    <div class="container mt-5">
-                        <h1 class="text-center  text-white .card-title-a" id="container">{{ shoe.name }}</h1><br><br>
-                        <div class="row">
-                            <div class="col-md-6">
-                                {% if primary_image %}
-                                    <img style="width: 400px; height: 300px; margin-left: 100px;" src="{{ primary_image.image.url }}" class="img-fluid" alt="{{ shoe.name }}">
-                                {% else %}
-                                    <img style="width: 500px; height: 400px; margin-left:100px;" src="{% static 'images/download.jpg' %}" class="img-fluid" alt="{{ shoe.name }}">
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 .card-title-a">
-                                <h2 class="text-white">${{ shoe.price }}</h2>
-                                <p>{{ shoe.description }}</p>
-                                <p><strong>Category:</strong> {{ shoe.category.name }}</p>
-                                <p><strong>Sizes:</strong> 
-                                    {% for attr in shoe_attributes %}
-                                        {% for size in attr.size.all %}
-                                            {{ size.name }}{% if not forloop.parentloop.last or not forloop.last %}, {% endif %}
+              <div class="container mt-5">
+                <div class="row">
+                    <section class="property-grid grid">
+                        <div class="container mt-5">
+                            <h1 class="text-center  text-white card-title-a" id="container">{{ shoe.name }}</h1><br><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if primary_image %}
+                                        <img style="width: 400px; height: 300px; margin-left: 0px;" src="{{ primary_image.image.url }}" class="img-fluid" alt="{{ shoe.name }}">
+                                    {% else %}
+                                        <img style="width: 500px; height: 400px; margin-left:0px;" src="{% static 'images/download.jpg' %}" class="img-fluid" alt="{{ shoe.name }}">
+                                    {% endif %}
+                                    <br><br>
+                                </div>
+                                <div class="col-md-6 .card-title-a">
+                                    <h2 class="text-white">${{ shoe.price }}</h2>
+                                    <p style="font-size:20px">{{ shoe.description }}</p>
+                                    <p style="font-size:20px">Category:{{ shoe.category.name }}</p>
+                                    <p style="font-size:20px">Sizes:
+                                        {% for attr in shoe_attributes %}
+                                            {% for size in attr.size.all %}
+                                                {{ size.name }}{% if not forloop.parentloop.last or not forloop.last %}, {% endif %}
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                </p>
-                                <p><strong>Colors:</strong> 
-                                    
-                                </p>
-                   {% for attr in shoe_attributes %}
-                                        {{ attr.color.name }}{% if not forloop.last %}, {% endif %}
-                                        <form action="{% url 'cart:add-to-cart-view' attr.id%}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="shoe_attribute_id" value="{{attr.id}}">
-                                            <input type="submit" class="btn btn-success" value="Add to Cart">
-                                        </form>
-                                    {% endfor %}             {% comment "" %}<a style="margin-left: 70px;" href="{% url 'cart:add-to-cart' item.shoe_attribute.id %}"class="btn btn-primary">Add to Cart</a>{% endcomment %}
-                                <a href="{% url 'products:shoe-3d-view' shoe.slug %}" class="btn btn-secondary">View in 3D</a>
+                                    </p>
+                                    <p style="font-size:20px">Colors:
+                       {% for attr in shoe_attributes %}
+                                            {{ attr.color.name }}{% if not forloop.last %}, {% endif %} </p>
+                                            <form action="{% url 'cart:add-to-cart-view' attr.id%}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="shoe_attribute_id" value="{{attr.id}}">
+                                                <input type="submit" class="btn btn-success" value="Add to Cart">
+                                            </form>
+                                        {% endfor %}             {% comment "" %}<a style="margin-left: 70px;" href="{% url 'cart:add-to-cart' item.shoe_attribute.id %}"class="btn btn-primary">Add to Cart</a>{% endcomment %}
+                                    <a href="{% url 'products:shoe-3d-view' shoe.slug %}" class="btn btn-secondary">View in 3D</a><br><br><br>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    
+                </div>
+            </div>
+        
           </div>
         </div>
+    
       </div>
     </div>
-  </div>
-    
-    <br>
-    <br>
-    <h3 class="text-center">Related Shoes<h3>
+</section>
 </html>
 {% endblock %}
