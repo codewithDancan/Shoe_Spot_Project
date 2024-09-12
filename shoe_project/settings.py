@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-
 from decouple import config
+import paypalrestsdk
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
 
     'django_filters',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +162,12 @@ EMAIL_RECEIVING_USER = os.getenv('EMAIL_RECEIVING_USER')
 
 # keyto store cart in the user session
 CART_SESSION_ID = 'cart'
+
+
+
+PAYPAL_CLIENT_ID = config("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
+PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL')
+PAYPAL_TEST = config("PAYPAL_TEST")
+PAYPAL_MODE = config("PAYPAL_MODE")
+

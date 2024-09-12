@@ -19,7 +19,7 @@ from blog.models import BlogPost
 from django.contrib.auth.models import User, Group
 
 
-@login_required(login_url="login-view")
+
 def home_view(request):
     shoes = Shoe.objects.all()[:5]
     latest_posts = BlogPost.objects.all().order_by('-created_at')[:3]

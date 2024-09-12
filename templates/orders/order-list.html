@@ -25,7 +25,7 @@
             <tbody>
                 {% for order in orders %}
                     <tr>
-                        <td>{{ orde.address }}</td>
+                        <td>{{ order.address }}</td>
                         <td>
                             <a href="{% url 'orders:order-detail' order.id %}">{{ order.reference_number }}</a>
                         </td>

@@ -49,8 +49,8 @@ class Order(AbstractBaseModel):
         CANCELED = "Canceled", _("Canceled")
 
     class PaymentMethods(models.TextChoices):
-        PAYPAL = "FlutterWave", _("FlutterWave")
-        CARD = "Card", _("Card")
+        FLUTTERWAVE = "FlutterWave", _("FlutterWave")
+        PAYPAL = "Paypal", _("Paypal")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE)

@@ -30,6 +30,7 @@ urlpatterns = [
     path("", include("cart.urls", namespace="cart")),
     path("", include("orders.urls", namespace="orders")),
     path("", include("blog.urls", namespace="blog")),
+    path("", include("paypal.standard.ipn.urls")),
 ] + static(settings.STATIC_URL,
                        document_root = settings.STATIC_ROOT) + static(
                            settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
