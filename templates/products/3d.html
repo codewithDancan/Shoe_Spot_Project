@@ -10,14 +10,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
     <style>
-        /* Add specific styling if needed */
-        .viewer-container {
-            border: 1px solid #ddd; /* Add border to see the container */
+        .image-container {
+            width: 300px; /* Adjust width as needed */
+            height: 300px; /* Adjust height as needed */
+            margin: 0 auto;
+            perspective: 1000px; /* Adds 3D perspective */
         }
+
         .img-center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.2s; /* Smooth transition */
+            transform-style: preserve-3d; /* Enable 3D transformations */
+        }
+
+        .image-container:hover .img-center {
+            transform: rotateY(10deg) rotateX(10deg); /* Initial 3D rotation */
         }
     </style>
 </head>
@@ -37,10 +45,7 @@
                                         <a href="{% url 'products:shoe-list' %}" class="btn btn-secondary btn-back">Back to Product List</a><br><br>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="viewer-container" id="shoeViewer" style="width: 100%; height: 500px;"></div>
-                                    </div>
+                                <div class="row image-container">
                                     <div class="col-md-6">
                                         {% for shoe in shoe_images %}
                                             <img class="img-center" style="width: 100%; height: auto; margin-bottom: 20px;" src="{{ shoe.image.url }}" alt="{{ shoe.name }}">
@@ -70,56 +75,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
-    // 3D Viewer setup with Three.js
-    const container = document.getElementById('shoeViewer');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+    const imageContainer = document.querySelector('.image-container');
+    const image = document.querySelector('.img-center');
 
-    // Load 3D model using GLTFLoader
-    const loader = new THREE.GLTFLoader();
-    loader.load('{% static "path/to/your/shoe-model.gltf" %}', function(gltf) {
-        const shoeModel = gltf.scene;
-        scene.add(shoeModel);
-        shoeModel.position.set(0, -1, 0);
-        shoeModel.scale.set(1.5, 1.5, 1.5); // Adjust size as needed
-        animate();
-    }, undefined, function(error) {
-        console.error('An error happened while loading the model:', error);
+    imageContainer.addEventListener('mousemove', (event) => {
+        const xAxis = (imageContainer.clientWidth / 2 - event.pageX + imageContainer.offsetLeft) / 20;
+        const yAxis = (imageContainer.clientHeight / 2 - event.pageY + imageContainer.offsetTop) / 20;
+
+        image.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
     });
 
-    // Add lighting
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-    hemiLight.position.set(0, 20, 0);
-    scene.add(hemiLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(10, 10, 10).normalize();
-    scene.add(directionalLight);
-
-    // Rotate the shoe model for a 3D view at all angles
-    function animate() {
-        requestAnimationFrame(animate);
-        scene.children.forEach(function(child) {
-            if (child.isMesh) {
-                child.rotation.y += 0.01; // Rotate the model around the Y-axis
-            }
-        });
-        renderer.render(scene, camera);
-    }
-
-    // Adjust camera on window resize
-    window.addEventListener('resize', function() {
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+    imageContainer.addEventListener('mouseleave', () => {
+        image.style.transform = 'rotateY(0deg) rotateX(0deg)'; /* Reset rotation */
     });
-
-    // Set the initial camera position
-    camera.position.z = 5;
 </script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
