@@ -32,75 +32,70 @@ def order_detail(request, order_id):
 @require_POST
 @login_required(login_url="login-view")
 def order_create(request):
-    if request.content_type == 'application/json':
-        try:
-            data = json.loads(request.body)
-            print("Request Data: ", data)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    print(request.POST)
+    # Handle form-encoded data instead of JSON
+    cart = request.POST.get('cart')
+    city_id = request.POST.get('city')
+    phone = request.POST.get('phone')
+    status = request.POST.get('status')
+    address = request.POST.get('address')
+    payment_method = request.POST.get('payment_method')
 
-        # Retrieves the cart associated with the current session
-        try:
-            cart = Cart.objects.get(session=request.session.session_key)
-        except Cart.DoesNotExist:
-            return JsonResponse({'error': 'Cart does not exist'}, status=400)
+    # Validate required fields
+    if not all([cart, city_id, phone, address, status, payment_method]):
+        return JsonResponse({'error': 'Missing required fields'}, status=400)
 
-        # Handles the incoming JSON data
-        city_id = data.get('city')
-        phone = data.get('phone')
-        address = data.get('address')
-        postal_code = data.get('postal_code')
+    # Retrieve the cart associated with the current session
+    try:
+        cart = Cart.objects.get(session=request.session.session_key)
+    except Cart.DoesNotExist:
+        return JsonResponse({'error': 'Cart does not exist'}, status=400)
 
-        if not all([city_id, phone, address]):
-            return JsonResponse({'error': 'Missing required fields'}, status=400)
+    # Fetch the city
+    try:
+        city = City.objects.get(id=city_id)
+    except City.DoesNotExist:
+        return JsonResponse({'error': 'City does not exist'}, status=400)
 
-        try:
-            city = City.objects.get(id=city_id)
-        except City.DoesNotExist:
-            return JsonResponse({'error': 'City does not exist'}, status=400)
+    # Create the order
+    order = Order(
+        cart=cart,
+        city=city,
+        phone=phone,
+        address=address,
+        payment_method=Order.PaymentMethods.PAYPAL,
+        status=Order.OrderStatus.PENDING,
+        is_paid=False
+    )
+    order.save()
 
-        # Creates the order
-        order = Order(
-            cart=cart,
-            city=city,
-            phone=phone,
-            address=address,
-            postal_code=postal_code,
-            payment_method=Order.PaymentMethods.PAYPAL,
-            status=Order.OrderStatus.PENDING,
-            is_paid=False
-        )
-        order.save()
-
-        # Creates the PayPal payment
-        cart_manager = CartMananger(request)
-        payment = paypalrestsdk.Payment({
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
+    # Create the PayPal payment
+    cart_manager = CartMananger(request)
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "transactions": [{
+            "amount": {
+                "total": str(cart_manager.get_total_price()),
+                "currency": "USD"
             },
-            "transactions": [{
-                "amount": {
-                    "total": str(cart_manager.get_total_price()),
-                    "currency": "USD"
-                },
-                "description": f"Order {order.reference_number}"
-            }],
-            "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('orders:capture-order', args=[order.id])),
-                "cancel_url": request.build_absolute_uri(reverse('cart:cart-detail-view'))
-            }
-        })
+            "description": f"Order {order.reference_number}"
+        }],
+        "redirect_urls": {
+            "return_url": request.build_absolute_uri(reverse('orders:capture-order', args=[order.id])),
+            "cancel_url": request.build_absolute_uri(reverse('cart:cart-detail-view'))
+        }
+    })
 
-        # Attempts to create the PayPal payment
-        if payment.create():
-            order.payment_id = payment.id
-            order.save()
-            return JsonResponse({'orderID': payment.id})
-        else:
-            return JsonResponse({'error': payment.error}, status=500)
+    # Attempt to create the PayPal payment
+    if payment.create():
+        order.payment_id = payment.id
+        order.save()
+        return JsonResponse({'orderID': payment.id})
     else:
-        return JsonResponse({'error': 'Invalid request format'}, status=400)
+        return JsonResponse({'error': payment.error}, status=500)
 
     
 

@@ -46,54 +46,75 @@ def checkout_view(request):
         return redirect('cart:cart-detail-view')
 
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        print("POST Data:", request.POST) 
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.cart = cart
-            order.save()
-            
-            # Fetchs the order details
-            city = order.city
-            phone = order.phone
-            address = order.address
-            postal_code = order.postal_code
-            
-            context = {
-                'email': request.user.email,
-                'name': request.user.get_full_name(),
-                'tx_ref': str(uuid.uuid4()),
-                'amount': CartMananger(request).get_total_price(),
-                'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
-                'currency': 'USD',
-                'quantity': cart.__len__(),
-                'form': form,
-                'cart': cart,
-                'city': city,
-                'phone': phone,
-                'address': address,
-                'postal_code': postal_code,
-            }
+        # Retrieve data directly from POST request
+        city_id = request.POST.get('city')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        postal_code = request.POST.get('postal_code')
+        payment_method = request.POST.get('payment_method')
+        status = request.POST.get('status')
 
-            return render(request, 'cart/checkout.html', context)
-        else:
-            print("Form Errors:", form.errors) 
-            return JsonResponse({'error': form.errors}, status=400)
-    else:
-        form = OrderForm()
+        # Validate required fields
+        if not all([city_id, phone, address, postal_code, payment_method, status]):
+            return JsonResponse({'error': 'Missing required fields'}, status=400)
 
-    context = {
-        'email': request.user.email,
-        'name': request.user.get_full_name(),
-        'tx_ref': str(uuid.uuid4()),
-        'amount': CartMananger(request).get_total_price(),
-        'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
-        'currency': 'USD',
-        'quantity': CartMananger(request).__len__(),
-        'form': form,
-        'cart': cart,
-    }
+        # Retrieve the city
+        try:
+            city = City.objects.get(id=city_id)
+        except City.DoesNotExist:
+            return JsonResponse({'error': 'City does not exist'}, status=400)
+
+        # Create and save the order
+        order = Order(
+            cart=cart,
+            city=city,
+            phone=phone,
+            address=address,
+            postal_code=postal_code,
+            payment_method=payment_method,
+            status=status,
+            is_paid=False
+        )
+        order.save()
+
+        # Prepare context data
+        context = {
+            'email': request.user.email,
+            'name': request.user.get_full_name(),
+            'tx_ref': str(uuid.uuid4()),
+            'amount': CartMananger(request).get_total_price(),
+            'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
+            'currency': 'USD',
+            'quantity': cart.__len__(),
+            'cart': cart,
+            'city': city.id,  # Ensure you pass city id
+            'phone': phone,
+            'address': address,
+            'postal_code': postal_code,
+            'status': status,
+            'payment_method': payment_method,
+        }
+        return render(request, 'cart/checkout.html', context)
     
+    else:
+        # Initialize empty data for GET requests
+        context = {
+            'email': request.user.email,
+            'name': request.user.get_full_name(),
+            'tx_ref': str(uuid.uuid4()),
+            'amount': CartMananger(request).get_total_price(),
+            'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
+            'currency': 'USD',
+            'quantity': CartMananger(request).__len__(),
+            'cart': cart,
+            'city': '',
+            'phone': '',
+            'address': '',
+            'postal_code': '',
+            'status': '',
+            'payment_method': '',
+        }
+
     return render(request, 'cart/checkout.html', context)
     
 

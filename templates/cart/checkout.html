@@ -80,55 +80,46 @@
         </form>
     </div>
 
+
+    <form id="order-form" action="{% url 'orders:order-create' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="cart" value="{{ cart }}">
+        <input type="hidden" name="city" value="{{ city }}">
+        <input type="hidden" name="payment_method" value="{{ payment_method }}">
+        <input type="hidden" name="status" value="{{ status }}">
+        <input type="hidden" name="phone" value="{{ phone }}">
+        <input type="hidden" name="address" value="{{ address }}">
+    </form>
+
     <div id="paypal-button-wrapper" style="text-align: center;">
         <div id="paypal-button-container"  style="display: inline-block; width: 750px;"></div>
     </div>
     
-    <script src="https://www.paypal.com/sdk/js?client-id=AdGufkVMBV_Rew1Sit07uwzdjpbajGncnUtHmgOMmYxAZ0pJefxlLvd9IiyiTrruBaPq-ZjTicsn_G_h&currency=USD&disable-funding=credit"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdGufkVMBV_Rew1Sit07uwzdjpbajGncnUtHmgOMmYxAZ0pJefxlLvd9IiyiTrruBaPq-ZjTicsn_G_h&currency=USD"></script>
     <script>
-        const csrftoken = '{{ csrf_token }}';
-    
         paypal.Buttons({
             style: {
                 shape: "rect",
                 layout: "horizontal",
                 color: "gold",
                 label: "paypal",
-
-                
-
             },
             createOrder: function(data, actions) {
-                return fetch("{% url 'orders:order-create' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify({
-                        city: '{{ city }}',
-                        phone: '{{ phone }}',
-                        address: '{{ address }}',
-                        postal_code: '{{ postal_code }}',
-                    })
-                }).then(function(response) {
-                    return response.json();
-                }).then(function(orderData) {
-                    return orderData.orderID;
+                // Before PayPal starts the process, submit the form
+                document.getElementById('order-form').submit();
+    
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '{{ amount }}'
+                        }
+                    }]
                 });
             },
             onApprove: function(data, actions) {
-                return fetch(`/payment-success/${data.orderID}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                }).then(function(response) {
-                    if (response.ok) {
-                        window.location.href = `/payment-success/${data.orderID}/`;
-                    } else {
-                        window.location.href = '/payment-failed/';
-                    }
+                return actions.order.capture().then(function(details) {
+                    // Redirect or display success message
+                    window.location.href = `/payment-success/${data.orderID}/`;
                 });
             },
             onCancel: function (data) {
