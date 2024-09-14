@@ -29,90 +29,19 @@ def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     return render(request, 'orders/order-detail.html', {'order': order})
 
-@require_POST
+
 @login_required(login_url="login-view")
 def order_create(request):
-    print(request.POST)
-    # Handle form-encoded data instead of JSON
-    cart = request.POST.get('cart')
-    city_id = request.POST.get('city')
-    phone = request.POST.get('phone')
-    status = request.POST.get('status')
-    address = request.POST.get('address')
-    payment_method = request.POST.get('payment_method')
-
-    # Validate required fields
-    if not all([cart, city_id, phone, address, status, payment_method]):
-        return JsonResponse({'error': 'Missing required fields'}, status=400)
-
-    # Retrieve the cart associated with the current session
-    try:
-        cart = Cart.objects.get(session=request.session.session_key)
-    except Cart.DoesNotExist:
-        return JsonResponse({'error': 'Cart does not exist'}, status=400)
-
-    # Fetch the city
-    try:
-        city = City.objects.get(id=city_id)
-    except City.DoesNotExist:
-        return JsonResponse({'error': 'City does not exist'}, status=400)
-
-    # Create the order
-    order = Order(
-        cart=cart,
-        city=city,
-        phone=phone,
-        address=address,
-        payment_method=Order.PaymentMethods.PAYPAL,
-        status=Order.OrderStatus.PENDING,
-        is_paid=False
-    )
-    order.save()
-
-    # Create the PayPal payment
-    cart_manager = CartMananger(request)
-    payment = paypalrestsdk.Payment({
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "transactions": [{
-            "amount": {
-                "total": str(cart_manager.get_total_price()),
-                "currency": "USD"
-            },
-            "description": f"Order {order.reference_number}"
-        }],
-        "redirect_urls": {
-            "return_url": request.build_absolute_uri(reverse('orders:capture-order', args=[order.id])),
-            "cancel_url": request.build_absolute_uri(reverse('cart:cart-detail-view'))
-        }
-    })
-
-    # Attempt to create the PayPal payment
-    if payment.create():
-        order.payment_id = payment.id
-        order.save()
-        return JsonResponse({'orderID': payment.id})
-    else:
-        return JsonResponse({'error': payment.error}, status=500)
-
-    
-
-@login_required(login_url="login-view")
-def capture_order(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
-    payment_id = order.payment_id
-
-    payment = paypalrestsdk.Payment.find(payment_id)
-
-    if payment.execute({"payer_id": request.POST.get('payerID')}):
-        order.is_paid = True
-        order.status = Order.OrderStatus.PROCESSING
-        order.save()
-        return JsonResponse({'status': 'success'})
-    else:
-        return JsonResponse({'error': payment.error}, status=500)
+    form = OrderForm(request.POST)
+    if request.method == "POST":
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect("orders:order-list")
+    context = {
+        "form": form,
+    }
+    return render(request, "orders/order-form.html", context)
         
         
 @login_required(login_url="login-view")

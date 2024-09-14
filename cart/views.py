@@ -10,9 +10,10 @@ import requests
 from django.http import JsonResponse
 from .models import CartItem, Cart
 from orders.validators import ValidationError
-from accounts.models import User
 from django.views.decorators.csrf import csrf_exempt
-from orders.forms import OrderForm
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse 
+
 
 
 
@@ -40,80 +41,17 @@ def cart_detail(request):
 
 @login_required(login_url="login-view")
 def checkout_view(request):
-    try:
-        cart = Cart.objects.get(session=request.session.session_key)
-    except Cart.DoesNotExist:
-        return redirect('cart:cart-detail-view')
 
-    if request.method == 'POST':
-        # Retrieve data directly from POST request
-        city_id = request.POST.get('city')
-        phone = request.POST.get('phone')
-        address = request.POST.get('address')
-        postal_code = request.POST.get('postal_code')
-        payment_method = request.POST.get('payment_method')
-        status = request.POST.get('status')
-
-        # Validate required fields
-        if not all([city_id, phone, address, postal_code, payment_method, status]):
-            return JsonResponse({'error': 'Missing required fields'}, status=400)
-
-        # Retrieve the city
-        try:
-            city = City.objects.get(id=city_id)
-        except City.DoesNotExist:
-            return JsonResponse({'error': 'City does not exist'}, status=400)
-
-        # Create and save the order
-        order = Order(
-            cart=cart,
-            city=city,
-            phone=phone,
-            address=address,
-            postal_code=postal_code,
-            payment_method=payment_method,
-            status=status,
-            is_paid=False
-        )
-        order.save()
-
-        # Prepare context data
-        context = {
-            'email': request.user.email,
-            'name': request.user.get_full_name(),
-            'tx_ref': str(uuid.uuid4()),
-            'amount': CartMananger(request).get_total_price(),
-            'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
-            'currency': 'USD',
-            'quantity': cart.__len__(),
-            'cart': cart,
-            'city': city.id,  # Ensure you pass city id
-            'phone': phone,
-            'address': address,
-            'postal_code': postal_code,
-            'status': status,
-            'payment_method': payment_method,
-        }
-        return render(request, 'cart/checkout.html', context)
+    context = {
+        'email': request.user.email,
+        'name': request.user.get_full_name(),
+        'tx_ref': str(uuid.uuid4()),
+        'amount': CartMananger(request).get_total_price(),
+        'redirect_url': '',
+        'currency': 'USD',
+        'quantity': CartMananger(request).__len__(),
     
-    else:
-        # Initialize empty data for GET requests
-        context = {
-            'email': request.user.email,
-            'name': request.user.get_full_name(),
-            'tx_ref': str(uuid.uuid4()),
-            'amount': CartMananger(request).get_total_price(),
-            'redirect_url': 'https://6e0d-105-161-4-104.ngrok-free.app',
-            'currency': 'USD',
-            'quantity': CartMananger(request).__len__(),
-            'cart': cart,
-            'city': '',
-            'phone': '',
-            'address': '',
-            'postal_code': '',
-            'status': '',
-            'payment_method': '',
-        }
+    }
 
     return render(request, 'cart/checkout.html', context)
     
@@ -142,6 +80,10 @@ def payment_success_view(request):
                 order.status = 'Paid'
                 order.save()
 
+                # Clear the cart after successful payment
+                cart_manager = CartMananger(request)
+                cart_manager.clear()
+                
                 # Render the payment success template
                 return render(request, 'payment-success.html', {
                     'user': request.user,
@@ -160,27 +102,7 @@ def payment_success_view(request):
     return JsonResponse({'success': False, 'message': 'Payment was not successful'})
 
 
-
-@csrf_exempt
-def paypal_payment_success_view(request, order_id):
-    try:
-        # Fetch the order using the order ID
-        order = get_object_or_404(Order, reference_number=order_id)
-
-        # Update the order status to indicate payment is successful
-        order.is_paid = True
-        order.status = Order.OrderStatus.PROCESSING
-        order.save()
-
-        # Clear the cart after successful payment
-        cart_manager = CartMananger(request)
-        cart_manager.clear()
-
-        return render(request, 'payment_success.html', {'order': order})
-    
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-def paypal_payment_failed_view(request):
+def payment_failed_view(request):
     """Handles failed payment."""
     return render(request, 'payment-failed.html', {
         'message': 'Payment was not successful. Please try again.'

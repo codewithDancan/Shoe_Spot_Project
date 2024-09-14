@@ -68,7 +68,7 @@
             <input type="hidden" name="customer[name]" value="{{ name }}" />
             <input type="hidden" name="tx_ref" value="{{ tx_ref }}" />
             <input type="hidden" name="amount" value="{{ amount }}" />
-            <input type="hidden" name="redirect_url" value=" https://9187-196-96-176-19.ngrok-free.app" />
+            <input type="hidden" name="redirect_url" value={{"https://9187-196-96-176-19.ngrok-free.app"}}/>
             <input type="hidden" name="currency" value="{{ currency }}" />
             <input type="hidden" name="meta[source]" value="docs-html-test" />
             <br>
@@ -81,7 +81,7 @@
     </div>
 
 
-    <form id="order-form" action="{% url 'orders:order-create' %}" method="POST">
+    <!--<form id="order-form" action="{% url 'orders:order-create' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="cart" value="{{ cart }}">
         <input type="hidden" name="city" value="{{ city }}">
@@ -130,5 +130,5 @@
                 alert('An error occurred with PayPal. Please try again.');
             }
         }).render('#paypal-button-container');
-    </script>
+    </script>-->
 {% endblock %}
